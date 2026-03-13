@@ -413,6 +413,130 @@ closeEditModal();
 
 });
 
+// -----------------------------
+// 種ごと集計
+// -----------------------------
+
+function normalizeSpecies(name){
+
+name = name.trim()
+
+// sp.を含む場合
+if(name.endsWith("sp.")){
+return name
+}
+
+return name
+
+}
+
+// 数字だけ取り出す
+function extractNumber(count){
+
+let num = parseInt(count.replace(/[^\d]/g,""))
+
+if(isNaN(num)) return 0
+
+return num
+
+}
+
+function showSummary(){
+
+let logs = JSON.parse(localStorage.getItem("birdLogs") || "[]")
+
+const today = new Date().toDateString()
+
+let speciesTotal = {}
+let timeTotal = {}
+
+logs.forEach(r=>{
+
+let recordDate = new Date(r.time).toDateString()
+
+if(recordDate !== today) return
+
+let species = normalizeSpecies(r.species)
+
+let num = extractNumber(r.count)
+
+// ----------------
+// 種ごと
+// ----------------
+
+if(!speciesTotal[species]){
+speciesTotal[species] = 0
+}
+
+speciesTotal[species] += num
+
+
+// ----------------
+// 時間ごと
+// ----------------
+
+let date = new Date(r.time)
+
+let hour = date.getHours()
+
+if(!timeTotal[hour]){
+timeTotal[hour] = {}
+}
+
+if(!timeTotal[hour][species]){
+timeTotal[hour][species] = 0
+}
+
+timeTotal[hour][species] += num
+
+})
+
+
+// ----------------
+// 種ごと表示
+// ----------------
+
+let text = ""
+
+Object.keys(speciesTotal)
+.sort()
+.forEach(s=>{
+
+text += s + " : " + speciesTotal[s] + "\n"
+
+})
+
+document.getElementById("summaryArea").textContent = text
+
+
+// ----------------
+// 時間ごと表示
+// ----------------
+
+let timeText = ""
+
+Object.keys(timeTotal)
+.sort((a,b)=>a-b)
+.forEach(hour=>{
+
+timeText += hour + "時\n"
+
+Object.keys(timeTotal[hour])
+.sort()
+.forEach(s=>{
+
+timeText += "  " + s + " : " + timeTotal[hour][s] + "\n"
+
+})
+
+timeText += "\n"
+
+})
+
+document.getElementById("timeSummaryArea").textContent = timeText
+
+}
+
 renderBirdButtons()
 updateCount()
 showLogs()
