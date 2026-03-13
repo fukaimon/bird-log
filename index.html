@@ -5,7 +5,6 @@
 <title>Bird Log</title>
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <link rel="stylesheet" href="style.css">
-<link rel="manifest" href="manifest.json">
 </head>
 
 <body>
@@ -25,7 +24,7 @@
 <div>
 
 <button onclick="minus()">−</button>
-<span id="count">0</span>
+<span id="count">1</span>
 <button onclick="plus()">＋</button>
 
 </div>
@@ -55,7 +54,7 @@
 
 <br>
 
-<button onclick="saveBird()">記録</button>
+<button id="saveBtn" onclick="saveBird()">記録</button>
 
 <h3>今日の記録</h3>
 <ul id="list"></ul>
@@ -77,13 +76,5 @@
 
 <script src="app.js"></script>
 
-<script>
-
-if ("serviceWorker" in navigator) {
-navigator.serviceWorker.register("service-worker.js")
-}
-
-</script>  
-  
 </body>
 </html>
