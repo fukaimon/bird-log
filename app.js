@@ -400,6 +400,18 @@ document.getElementById("exportArea").textContent = text
 }
 
 // -----------------------------
+// モーダル外クリックで閉じる
+// -----------------------------
+
+window.onclick = function(event){
+
+let modal = document.getElementById("editModal")
+
+if(event.target === modal){
+closeEditModal()
+}
+
+}
 
 renderBirdButtons()
 updateCount()
