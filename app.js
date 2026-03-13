@@ -403,15 +403,15 @@ document.getElementById("exportArea").textContent = text
 // モーダル外クリックで閉じる
 // -----------------------------
 
-window.onclick = function(event){
+const modal = document.getElementById("editModal");
 
-let modal = document.getElementById("editModal")
+modal.addEventListener("click", function(event){
 
 if(event.target === modal){
-closeEditModal()
+closeEditModal();
 }
 
-}
+});
 
 renderBirdButtons()
 updateCount()
