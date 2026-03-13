@@ -1,4 +1,4 @@
-const CACHE_NAME = "birdlog-cache-v2"
+const CACHE_NAME = "birdlog-cache-v2";
 
 const urlsToCache = [
 "./",
@@ -7,17 +7,19 @@ const urlsToCache = [
 "./app.js",
 "./manifest.json",
 "./icon.png"
-]
+];
 
 // インストール
 self.addEventListener("install", event => {
 
 event.waitUntil(
 caches.open(CACHE_NAME)
-.then(cache => cache.addAll(urlsToCache))
-)
-
+.then(cache => {
+return cache.addAll(urlsToCache);
 })
+);
+
+});
 
 // 古いキャッシュ削除
 self.addEventListener("activate", event => {
@@ -29,23 +31,26 @@ return Promise.all(
 cacheNames.map(cache => {
 
 if(cache !== CACHE_NAME){
-return caches.delete(cache)
+return caches.delete(cache);
 }
 
 })
-)
+
+);
 
 })
-)
+);
 
-})
+});
 
 // fetch
 self.addEventListener("fetch", event => {
 
 event.respondWith(
 caches.match(event.request)
-.then(response => response || fetch(event.request))
-)
-
+.then(response => {
+return response || fetch(event.request);
 })
+);
+
+});
