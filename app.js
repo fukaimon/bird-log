@@ -1,9 +1,9 @@
 let count = 1
 let approxSymbol = ""
 
-// 編集管理
+// 編集用
 let editIndex = null
-let editTime = null
+let editApproxSymbol = ""
 
 // -----------------------------
 // 鳥リスト管理
@@ -107,16 +107,12 @@ let input = document.getElementById("species")
 let name = input.value.trim()
 
 if(name === "sp."){
-
 input.value = ""
 return
-
 }
 
 if(name.endsWith(" sp.")){
-
 input.value = name.replace(" sp.","")
-
 }else{
 
 if(name !== ""){
@@ -173,7 +169,7 @@ area.textContent = approxSymbol
 }
 
 // -----------------------------
-// 記録保存 / 更新
+// 記録保存
 // -----------------------------
 
 function saveBird(){
@@ -190,30 +186,17 @@ countValue = input.value
 
 const finalCount = countValue + approxSymbol
 
-// 編集なら元時間を使う
-const time = editTime ? editTime : new Date()
-
 const record = {
 species: species,
 count: finalCount,
-time: time
+time: new Date()
 }
 
 let logs = JSON.parse(localStorage.getItem("birdLogs") || "[]")
 
-if(editIndex !== null){
-logs[editIndex] = record
-}else{
 logs.push(record)
-}
 
 localStorage.setItem("birdLogs", JSON.stringify(logs))
-
-// 編集状態解除
-editIndex = null
-editTime = null
-
-document.getElementById("saveBtn").textContent = "記録"
 
 // リセット
 count = 1
@@ -304,7 +287,7 @@ showLogs()
 }
 
 // -----------------------------
-// 編集
+// 編集（ポップアップ）
 // -----------------------------
 
 function editRecord(index){
@@ -313,28 +296,72 @@ let logs = JSON.parse(localStorage.getItem("birdLogs") || "[]")
 
 let r = logs[index]
 
-document.getElementById("species").value = r.species
+editIndex = index
+
+document.getElementById("editSpecies").value = r.species
 
 let num = r.count.replace(/[+\-±]/g,"")
 let symbol = r.count.replace(/[0-9]/g,"")
 
-count = Number(num)
-approxSymbol = symbol
+document.getElementById("editCount").value = num
 
-updateCount()
+editApproxSymbol = symbol
 
-let input = document.getElementById("countInput")
-if(input) input.value = num
+document.getElementById("editApprox").textContent = symbol
 
-document.getElementById("approx").textContent = symbol
+document.getElementById("editModal").style.display="block"
 
-// 編集状態保存
-editIndex = index
-editTime = r.time
+}
 
-// ボタン変更
-document.getElementById("saveBtn").textContent = "更新"
+// -----------------------------
+// 編集概数
+// -----------------------------
 
+function setEditApprox(symbol){
+
+if(editApproxSymbol === symbol){
+editApproxSymbol = ""
+}else{
+editApproxSymbol = symbol
+}
+
+document.getElementById("editApprox").textContent = editApproxSymbol
+
+}
+
+// -----------------------------
+// 編集更新
+// -----------------------------
+
+function updateRecord(){
+
+let logs = JSON.parse(localStorage.getItem("birdLogs") || "[]")
+
+let species = document.getElementById("editSpecies").value
+let count = document.getElementById("editCount").value
+
+let r = logs[editIndex]
+
+logs[editIndex] = {
+species: species,
+count: count + editApproxSymbol,
+time: r.time
+}
+
+localStorage.setItem("birdLogs", JSON.stringify(logs))
+
+closeEditModal()
+
+showLogs()
+
+}
+
+// -----------------------------
+// 編集閉じる
+// -----------------------------
+
+function closeEditModal(){
+document.getElementById("editModal").style.display="none"
 }
 
 // -----------------------------
