@@ -21,6 +21,11 @@ button { margin:2px; padding:5px 10px; font-size:14px; cursor:pointer; }
 
 <h2>鳥の記録</h2>
 
+<div style="margin-bottom:10px;">
+  <button id="gpsToggleBtn" onclick="toggleGPS()">GPS: オフ</button>
+  <span id="gpsStatus">緯度経度未取得</span>
+</div>
+
 <label>鳥の名前</label><br>
 <input id="species">
 <button onclick="toggleSp()">sp.</button>
@@ -108,6 +113,14 @@ button { margin:2px; padding:5px 10px; font-size:14px; cursor:pointer; }
 <input id="newBird">
 <button onclick="addBird()">追加</button>
 <ul id="customBirdList"></ul>
+
+<div style="margin-top:10px;">
+  <strong>現在の位置情報</strong><br>
+  緯度: <span id="latDisplay">-</span><br>
+  経度: <span id="lonDisplay">-</span><br>
+  <button onclick="updateGPS()">今いる位置を更新</button>
+  <span id="gpsStatus" style="margin-left:10px;">未取得</span>
+</div>
 
 <!-- 編集ポップアップ -->
 <div id="editModal" class="modal">
