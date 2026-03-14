@@ -1,125 +1,105 @@
 <!DOCTYPE html>
 <html>
-
 <head>
 <meta charset="UTF-8">
 <title>Bird Log</title>
 <meta name="viewport" content="width=device-width,initial-scale=1">
-
-<link rel="manifest" href="manifest.json">
-
 <link rel="stylesheet" href="style.css">
 </head>
-
 <body>
 
 <h2>鳥の記録</h2>
 
 <label>鳥の名前</label><br>
 <input id="species">
-
 <button onclick="toggleSp()">sp.</button>
 
 <h3>よく見る鳥</h3>
 <div id="birdButtons"></div>
 
 <h3>数</h3>
-
 <div>
-<button onclick="minus()">−</button>
-<span id="count">1</span>
-<button onclick="plus()">＋</button>
+  <button onclick="minus()">−</button>
+  <span id="count">0</span>
+  <button onclick="plus()">＋</button>
 </div>
 
-<br>
+<div id="numPad">
+  <button onclick="addNumber(1)">1</button>
+  <button onclick="addNumber(2)">2</button>
+  <button onclick="addNumber(3)">3</button>
+  <button onclick="addNumber(4)">4</button>
+  <button onclick="addNumber(5)">5</button>
+  <button onclick="addNumber(6)">6</button>
+  <button onclick="addNumber(7)">7</button>
+  <button onclick="addNumber(8)">8</button>
+  <button onclick="addNumber(9)">9</button>
+  <button onclick="addNumber(10)">10</button>
+  <button onclick="addNumber(50)">50</button>
+  <button onclick="addNumber(100)">100</button>
+  <button onclick="resetCount()">リセット</button>
+</div>
 
-<div>
 <label>直接入力</label><br>
-<input id="countInput" type="number" value="1">
-</div>
-
-<br>
-
-<div>
+<input id="countInput" type="number" value="0">
 
 <label>おおよその数</label><br>
-
 <button onclick="setApprox('+')">+</button>
 <button onclick="setApprox('-')">-</button>
 <button onclick="setApprox('±')">±</button>
-
 <span id="approx"></span>
 
-</div>
-
-<br>
-
+<br><br>
 <button id="saveBtn" onclick="saveBird()">記録</button>
 
-<h3>今日の記録</h3>
-<ul id="list"></ul>
+<hr>
 
-<h3>テキスト出力</h3>
+<!-- 折り畳み表示セクション -->
+<h3><button onclick="toggleSection('logSection')">今日の記録表示</button></h3>
+<div id="logSection">
+  <ul id="list"></ul>
+</div>
 
-<h3>種ごとの合計（今日）</h3>
+<h3><button onclick="toggleSection('summarySection')">種ごとの合計</button></h3>
+<div id="summarySection">
+  <pre id="summaryArea"></pre>
+</div>
 
-<button onclick="showSummary()">表示</button>
+<h3><button onclick="toggleSection('timeSummarySection')">時間ごとの合計</button></h3>
+<div id="timeSummarySection">
+  <pre id="timeSummaryArea"></pre>
+</div>
 
-<pre id="summaryArea"></pre>
-
-<h3>時間ごとの合計（今日）</h3>
-
-<pre id="timeSummaryArea"></pre>
-
-<button onclick="exportText()">表示</button>
-
-<pre id="exportArea"></pre>
+<h3><button onclick="toggleSection('exportSection')">テキスト出力</button></h3>
+<div id="exportSection">
+  <pre id="exportArea"></pre>
+</div>
 
 <hr>
 
 <h3>よく見る鳥を設定</h3>
-
 <input id="newBird">
 <button onclick="addBird()">追加</button>
-
 <ul id="customBirdList"></ul>
 
 <!-- 編集ポップアップ -->
-
 <div id="editModal" class="modal">
-
-<div class="modal-content">
-
-<h3>記録を編集</h3>
-
-<label>鳥の名前</label><br>
-<input id="editSpecies">
-
-<br><br>
-
-<label>数</label><br>
-<input id="editCount" type="number">
-
-<br><br>
-
-<label>概数</label><br>
-
-<button onclick="setEditApprox('+')">+</button>
-<button onclick="setEditApprox('-')">-</button>
-<button onclick="setEditApprox('±')">±</button>
-
-<span id="editApprox"></span>
-
-<br><br>
-
-<button onclick="updateRecord()">更新</button>
-<button onclick="closeEditModal()">キャンセル</button>
-
-</div>
-
+  <div class="modal-content">
+    <h3>記録を編集</h3>
+    <label>鳥の名前</label><br>
+    <input id="editSpecies"><br><br>
+    <label>数</label><br>
+    <input id="editCount" type="number"><br><br>
+    <label>概数</label><br>
+    <button onclick="setEditApprox('+')">+</button>
+    <button onclick="setEditApprox('-')">-</button>
+    <button onclick="setEditApprox('±')">±</button>
+    <span id="editApprox"></span><br><br>
+    <button onclick="updateRecord()">更新</button>
+    <button onclick="closeEditModal()">キャンセル</button>
+  </div>
 </div>
 
 <script src="app.js"></script>
-
 </body>
 </html>
