@@ -62,3 +62,57 @@ input{
   max-width:300px;
   border-radius:10px;
 }
+
+/* ----------------- */
+/* テンキー改善：ボタン大きさと文字中央揃え */
+#numPad button {
+  width: 60px;       /* ボタン幅を少し大きく */
+  height: 50px;      /* ボタン高さ */
+  line-height: 50px; /* 文字を縦中央に */
+  font-size: 16px;   /* 文字サイズ調整 */
+  text-align: center;
+  vertical-align: middle;
+  border-radius: 5px;
+  box-sizing: border-box;
+}
+
+/* リセットボタンは幅広め */
+#numPad button.reset {
+  width: 130px;
+}
+
+/* ----------------- */
+/* テンキー共通 */
+#numPad {
+  margin-top: 10px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 5px;
+  justify-content: flex-start;
+}
+
+#numPad button {
+  width: 70px;          /* ボタン幅を統一 */
+  height: 50px;         /* ボタン高さを統一 */
+  line-height: 50px;    /* 文字を上下中央に */
+  text-align: center;
+  font-size: 16px;
+  border-radius: 5px;
+  border: 1px solid #333; /* 枠線を細く濃さは濃いめに */
+  box-sizing: border-box;
+  padding: 0;           /* line-heightで中央揃えしているので余白不要 */
+}
+
+/* リセットボタンも他のボタンと同サイズで統一 */
+#numPad button.reset {
+  width: 70px;          /* 他ボタンと同じサイズ */
+}
+
+/* ----------------- */
+/* 折り畳み表示用、枠なし */
+.toggleContent {
+  display: none;     /* 初期は折り畳み */
+  padding: 0;
+  margin-top: 5px;
+  border: none;      /* 枠線を消す */
+}
