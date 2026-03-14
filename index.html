@@ -7,12 +7,70 @@
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <link rel="manifest" href="manifest.json">
 <link rel="stylesheet" href="style.css">
+
 <style>
-  button { margin: 2px; padding: 5px 10px; font-size: 14px; }
-  #numPad button { width: 40px; height: 40px; }
-  .toggleContent { display: none; border: 1px solid #ccc; padding: 5px; margin-top: 5px; }
-  .modal { display: none; position: fixed; z-index: 10; left:0; top:0; width:100%; height:100%; background-color: rgba(0,0,0,0.5); }
-  .modal-content { background-color: #fff; margin: 10% auto; padding: 20px; width: 90%; max-width: 400px; border-radius: 5px; }
+/* ----------------- */
+/* ボタン全体 */
+button {
+  margin: 2px;
+  padding: 5px 10px;
+  font-size: 14px;
+  cursor: pointer;
+}
+
+/* ----------------- */
+/* テンキー */
+#numPad {
+  margin-top: 10px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 5px;
+}
+
+#numPad button {
+  width: 60px;
+  height: 50px;
+  line-height: 50px;
+  text-align: center;
+  font-size: 16px;
+  border-radius: 5px;
+  box-sizing: border-box;
+}
+
+#numPad button.reset {
+  width: 130px;
+}
+
+/* ----------------- */
+/* 折り畳み対象 */
+.toggleContent {
+  display: none;
+  padding: 0;
+  margin-top: 5px;
+  border: none; /* 枠線を消す */
+}
+
+/* ----------------- */
+/* モーダル */
+.modal {
+  display: none;
+  position: fixed;
+  z-index: 10;
+  left:0;
+  top:0;
+  width:100%;
+  height:100%;
+  background-color: rgba(0,0,0,0.5);
+}
+
+.modal-content {
+  background-color: #fff;
+  margin: 10% auto;
+  padding: 20px;
+  width: 90%;
+  max-width: 400px;
+  border-radius: 5px;
+}
 </style>
 </head>
 
@@ -47,7 +105,7 @@
   <button onclick="addNumber(10)">10</button>
   <button onclick="addNumber(50)">50</button>
   <button onclick="addNumber(100)">100</button>
-  <button onclick="resetCount()">リセット</button>
+  <button class="reset" onclick="resetCount()">リセット</button>
 </div>
 
 <br>
@@ -63,8 +121,10 @@
 <button id="saveBtn" onclick="saveBird()">記録</button>
 
 <!-- 今日の記録 -->
-<h3><button onclick="toggleSection('logSection')">今日の記録</button>
-<button onclick="clearTodayLogs()">一括削除</button></h3>
+<h3>
+  <button onclick="toggleSection('logSection')">今日の記録</button>
+  <button onclick="clearTodayLogs()">一括削除</button>
+</h3>
 <div id="logSection" class="toggleContent">
   <ul id="list"></ul>
 </div>
@@ -119,8 +179,8 @@ function toggleSectionAndExport(id){
 }
 
 // 初期状態はすべて展開
-document.addEventListener("DOMContentLoaded", ()=>{
-  ["logSection","summarySection","timeSummarySection","exportSection"].forEach(id=>{
+document.addEventListener("DOMContentLoaded", ()=> {
+  ["logSection","summarySection","timeSummarySection","exportSection"].forEach(id => {
     const el = document.getElementById(id);
     if(el) el.style.display = "block";
   });
