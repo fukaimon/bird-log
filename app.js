@@ -1,7 +1,3 @@
-// ==============================
-// app.js フルバージョン
-// ==============================
-
 // -----------------------------
 // カウント初期化
 // -----------------------------
@@ -351,6 +347,27 @@ document.addEventListener("DOMContentLoaded",()=>{
     if(el) el.style.display = "block"
   })
 })
+
+// -----------------------------
+// 今日の記録一括削除
+// -----------------------------
+function clearTodayLogs() {
+  if(!confirm("今日の記録をすべて削除します。よろしいですか？")) return;
+
+  let logs = JSON.parse(localStorage.getItem("birdLogs") || "[]");
+  const today = new Date().toDateString();
+
+  // 今日以外のレコードだけ残す
+  logs = logs.filter(r => {
+    let recordDate = new Date(r.time).toDateString();
+    return recordDate !== today;
+  });
+
+  localStorage.setItem("birdLogs", JSON.stringify(logs));
+
+  showLogs();
+  showSummary(); // 総計も更新
+}
 
 // ==============================
 // 初期表示
