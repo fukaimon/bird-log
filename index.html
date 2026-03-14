@@ -1,79 +1,22 @@
 <!DOCTYPE html>
 <html lang="ja">
-
 <head>
 <meta charset="UTF-8">
 <title>Bird Log</title>
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <link rel="manifest" href="manifest.json">
 <link rel="stylesheet" href="style.css">
-
 <style>
-/* ----------------- */
-/* ボタン全体 */
-button {
-  margin: 2px;
-  padding: 5px 10px;
-  font-size: 14px;
-  cursor: pointer;
-}
-
-/* ----------------- */
-/* テンキー */
-#numPad {
-  margin-top: 10px;
-  display: flex;
-  flex-wrap: wrap;
-  gap: 5px;
-}
-
-#numPad button {
-  width: 60px;
-  height: 50px;
-  line-height: 50px;
-  text-align: center;
-  font-size: 16px;
-  border-radius: 5px;
-  box-sizing: border-box;
-}
-
-#numPad button.reset {
-  width: 130px;
-}
-
-/* ----------------- */
-/* 折り畳み対象 */
-.toggleContent {
-  display: none;
-  padding: 0;
-  margin-top: 5px;
-  border: none; /* 枠線を消す */
-}
-
-/* ----------------- */
-/* モーダル */
-.modal {
-  display: none;
-  position: fixed;
-  z-index: 10;
-  left:0;
-  top:0;
-  width:100%;
-  height:100%;
-  background-color: rgba(0,0,0,0.5);
-}
-
-.modal-content {
-  background-color: #fff;
-  margin: 10% auto;
-  padding: 20px;
-  width: 90%;
-  max-width: 400px;
-  border-radius: 5px;
-}
+/* ボタン・テンキー・折り畳み・モーダルは以前のスタイルと同じ */
+button { margin:2px; padding:5px 10px; font-size:14px; cursor:pointer; }
+#numPad { margin-top:10px; display:flex; flex-wrap:wrap; gap:5px; }
+#numPad button { width:70px; height:50px; line-height:50px; text-align:center; font-size:16px; border-radius:5px; border:1px solid #333; box-sizing:border-box; padding:0; }
+#numPad button.reset { width:70px; }
+.toggleContent { display:none; padding:0; margin-top:5px; border:none; }
+.modal { display:none; position:fixed; z-index:10; left:0; top:0; width:100%; height:100%; background-color: rgba(0,0,0,0.5);}
+.modal-content { background-color:#fff; margin:10% auto; padding:20px; width:90%; max-width:400px; border-radius:5px;}
 </style>
 </head>
-
 <body>
 
 <h2>鳥の記録</h2>
@@ -118,6 +61,13 @@ button {
 </div>
 
 <br>
+<h3>位置情報</h3>
+<div>
+緯度: <span id="latDisplay">-</span><br>
+経度: <span id="lonDisplay">-</span>
+</div>
+
+<br>
 <button id="saveBtn" onclick="saveBird()">記録</button>
 
 <!-- 今日の記録 -->
@@ -141,10 +91,16 @@ button {
   <pre id="timeSummaryArea"></pre>
 </div>
 
-<!-- テキスト出力 -->
-<h3><button onclick="toggleSectionAndExport('exportSection')">テキスト出力</button></h3>
-<div id="exportSection" class="toggleContent">
-  <pre id="exportArea"></pre>
+<!-- テキスト出力（従来形式） -->
+<h3><button onclick="toggleSection('exportSectionText')">テキスト出力（時間・種名・数）</button></h3>
+<div id="exportSectionText" class="toggleContent">
+  <pre id="exportAreaText"></pre>
+</div>
+
+<!-- テキスト出力（CSV形式） -->
+<h3><button onclick="toggleSection('exportSectionCSV')">CSV形式出力（時間,種名,数,緯度,経度）</button></h3>
+<div id="exportSectionCSV" class="toggleContent">
+  <pre id="exportAreaCSV"></pre>
 </div>
 
 <hr>
@@ -173,16 +129,10 @@ button {
 
 <script src="app.js"></script>
 <script>
-function toggleSectionAndExport(id){
-  toggleSection(id);
-  if(id==='exportSection') exportText();
-}
-
-// 初期状態はすべて展開
-document.addEventListener("DOMContentLoaded", ()=> {
-  ["logSection","summarySection","timeSummarySection","exportSection"].forEach(id => {
-    const el = document.getElementById(id);
-    if(el) el.style.display = "block";
+document.addEventListener("DOMContentLoaded", ()=>{
+  ["logSection","summarySection","timeSummarySection","exportSectionText","exportSectionCSV"].forEach(id=>{
+    const el=document.getElementById(id)
+    if(el) el.style.display="block"
   });
 });
 </script>
