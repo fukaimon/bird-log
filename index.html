@@ -1,11 +1,21 @@
 <!DOCTYPE html>
-<html>
+<html lang="ja">
+
 <head>
 <meta charset="UTF-8">
 <title>Bird Log</title>
 <meta name="viewport" content="width=device-width,initial-scale=1">
+<link rel="manifest" href="manifest.json">
 <link rel="stylesheet" href="style.css">
+<style>
+  button { margin: 2px; padding: 5px 10px; font-size: 14px; }
+  #numPad button { width: 40px; height: 40px; }
+  .toggleContent { display: none; border: 1px solid #ccc; padding: 5px; margin-top: 5px; }
+  .modal { display: none; position: fixed; z-index: 10; left:0; top:0; width:100%; height:100%; background-color: rgba(0,0,0,0.5); }
+  .modal-content { background-color: #fff; margin: 10% auto; padding: 20px; width: 90%; max-width: 400px; border-radius: 5px; }
+</style>
 </head>
+
 <body>
 
 <h2>鳥の記録</h2>
@@ -40,43 +50,44 @@
   <button onclick="resetCount()">リセット</button>
 </div>
 
-<label>直接入力</label><br>
-<input id="countInput" type="number" value="0">
-
-<label>おおよその数</label><br>
+<br>
+<div>
+<label>概数</label><br>
 <button onclick="setApprox('+')">+</button>
 <button onclick="setApprox('-')">-</button>
 <button onclick="setApprox('±')">±</button>
 <span id="approx"></span>
+</div>
 
-<br><br>
+<br>
 <button id="saveBtn" onclick="saveBird()">記録</button>
 
-<hr>
-
-<!-- 折り畳み表示セクション -->
-<h3><button onclick="toggleSection('logSection')">今日の記録表示</button></h3>
-<div id="logSection">
+<!-- 今日の記録 -->
+<h3><button onclick="toggleSection('logSection')">今日の記録</button>
+<button onclick="clearTodayLogs()">一括削除</button></h3>
+<div id="logSection" class="toggleContent">
   <ul id="list"></ul>
 </div>
 
-<h3><button onclick="toggleSection('summarySection')">種ごとの合計</button></h3>
-<div id="summarySection">
+<!-- 種ごとの総計 -->
+<h3><button onclick="toggleSection('summarySection')">種ごとの総計（今日）</button></h3>
+<div id="summarySection" class="toggleContent">
   <pre id="summaryArea"></pre>
 </div>
 
-<h3><button onclick="toggleSection('timeSummarySection')">時間ごとの合計</button></h3>
-<div id="timeSummarySection">
+<!-- 時間ごとの総計 -->
+<h3><button onclick="toggleSection('timeSummarySection')">時間ごとの総計（今日）</button></h3>
+<div id="timeSummarySection" class="toggleContent">
   <pre id="timeSummaryArea"></pre>
 </div>
 
-<h3><button onclick="toggleSection('exportSection')">テキスト出力</button></h3>
-<div id="exportSection">
+<!-- テキスト出力 -->
+<h3><button onclick="toggleSectionAndExport('exportSection')">テキスト出力</button></h3>
+<div id="exportSection" class="toggleContent">
   <pre id="exportArea"></pre>
 </div>
 
 <hr>
-
 <h3>よく見る鳥を設定</h3>
 <input id="newBird">
 <button onclick="addBird()">追加</button>
@@ -101,5 +112,20 @@
 </div>
 
 <script src="app.js"></script>
+<script>
+function toggleSectionAndExport(id){
+  toggleSection(id);
+  if(id==='exportSection') exportText();
+}
+
+// 初期状態はすべて展開
+document.addEventListener("DOMContentLoaded", ()=>{
+  ["logSection","summarySection","timeSummarySection","exportSection"].forEach(id=>{
+    const el = document.getElementById(id);
+    if(el) el.style.display = "block";
+  });
+});
+</script>
+
 </body>
 </html>
