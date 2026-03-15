@@ -259,51 +259,83 @@ modal.addEventListener("click", function(event) {
   if (event.target === modal) closeEditModal();
 });
 
-// -----------------------------
-// GPS取得
-// -----------------------------
-function updateGPS() {
+// =============================
+// GPS管理
+// =============================
 
-  const status = document.getElementById("gpsStatus");
-  const latSpan = document.getElementById("latDisplay");
-  const lonSpan = document.getElementById("lonDisplay");
+let currentLat = null
+let currentLng = null
+let gpsWatchId = null
 
-  if (!navigator.geolocation) {
-    status.textContent = "GPS未対応";
-    return;
+
+function updateGPS(){
+
+  const status = document.getElementById("gpsStatus")
+
+  if(!navigator.geolocation){
+    status.textContent="GPS未対応"
+    return
   }
 
-  status.textContent = "取得中...";
+  status.textContent="GPS取得開始"
 
-  navigator.geolocation.getCurrentPosition(
+  if(gpsWatchId!==null){
+    navigator.geolocation.clearWatch(gpsWatchId)
+  }
+
+  gpsWatchId = navigator.geolocation.watchPosition(
 
     function(position){
 
-      currentLat = position.coords.latitude.toFixed(6);
-      currentLng = position.coords.longitude.toFixed(6);
+      currentLat = position.coords.latitude.toFixed(6)
+      currentLng = position.coords.longitude.toFixed(6)
 
-      latSpan.textContent = currentLat;
-      lonSpan.textContent = currentLng;
+      document.getElementById("latDisplay").textContent=currentLat
+      document.getElementById("lonDisplay").textContent=currentLng
 
-      status.textContent = "取得完了";
+      const now=new Date()
+
+      const time=
+        now.getHours().toString().padStart(2,"0")+":"+
+        now.getMinutes().toString().padStart(2,"0")+":"+
+        now.getSeconds().toString().padStart(2,"0")
+
+      document.getElementById("gpsTime").textContent=time
+
+      status.textContent="GPS更新中"
 
     },
 
     function(error){
 
-      status.textContent = "位置情報取得失敗";
+      status.textContent="GPS取得失敗"
 
-      console.log(error);
+      console.log(error)
 
     },
 
     {
-      enableHighAccuracy: true,
-      timeout: 10000,
-      maximumAge: 0
+      enableHighAccuracy:true,
+      maximumAge:0,
+      timeout:10000
     }
 
-  );
+  )
+
+}
+
+function stopGPS(){
+
+  if(gpsWatchId!==null){
+
+    navigator.geolocation.clearWatch(gpsWatchId)
+
+    gpsWatchId=null
+
+    document.getElementById("gpsStatus").textContent="GPS停止"
+
+  }
+
 }
 
 
