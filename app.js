@@ -263,33 +263,49 @@ modal.addEventListener("click", function(event) {
 // GPS取得
 // -----------------------------
 function updateGPS() {
+
   const status = document.getElementById("gpsStatus");
   const latSpan = document.getElementById("latDisplay");
   const lonSpan = document.getElementById("lonDisplay");
 
   if (!navigator.geolocation) {
-    status.textContent = "この端末ではGPS未対応";
+    status.textContent = "GPS未対応";
     return;
   }
 
   status.textContent = "取得中...";
+
   navigator.geolocation.getCurrentPosition(
-    (pos) => {
-      currentLat = pos.coords.latitude.toFixed(6);
-      currentLng = pos.coords.longitude.toFixed(6);
+
+    function(position){
+
+      currentLat = position.coords.latitude.toFixed(6);
+      currentLng = position.coords.longitude.toFixed(6);
+
       latSpan.textContent = currentLat;
       lonSpan.textContent = currentLng;
+
       status.textContent = "取得完了";
+
     },
-    (err) => {
-      currentLat = null;
-      currentLng = null;
-      latSpan.textContent = "-";
-      lonSpan.textContent = "-";
-      status.textContent = "位置情報取得不可";
+
+    function(error){
+
+      status.textContent = "位置情報取得失敗";
+
+      console.log(error);
+
+    },
+
+    {
+      enableHighAccuracy: true,
+      timeout: 10000,
+      maximumAge: 0
     }
+
   );
 }
+
 
 // -----------------------------
 // テキスト出力（従来形式とCSV形式）
