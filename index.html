@@ -66,11 +66,6 @@ button { margin:2px; padding:5px 10px; font-size:14px; cursor:pointer; }
 </div>
 
 <br>
-<h3>位置情報</h3>
-<div>
-緯度: <span id="latDisplay">-</span><br>
-経度: <span id="lonDisplay">-</span>
-</div>
 
 <br>
 <button id="saveBtn" onclick="saveBird()">記録</button>
@@ -115,11 +110,17 @@ button { margin:2px; padding:5px 10px; font-size:14px; cursor:pointer; }
 <ul id="customBirdList"></ul>
 
 <div style="margin-top:10px;">
-  <strong>現在の位置情報</strong><br>
-  緯度: <span id="latDisplay">-</span><br>
-  経度: <span id="lonDisplay">-</span><br>
-  <button onclick="updateGPS()">今いる位置を更新</button>
-  <span id="gpsStatus" style="margin-left:10px;">未取得</span>
+<strong>現在の位置情報</strong><br>
+
+緯度: <span id="latDisplay">-</span><br>
+経度: <span id="lonDisplay">-</span><br>
+
+更新時刻: <span id="gpsTime">-</span><br><br>
+
+<button onclick="updateGPS()">今いる位置情報を更新</button>
+<button onclick="stopGPS()">GPS停止</button>
+
+<span id="gpsStatus">未取得</span>
 </div>
 
 <!-- 編集ポップアップ -->
