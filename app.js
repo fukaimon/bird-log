@@ -260,12 +260,12 @@ modal.addEventListener("click", function(event) {
 });
 
 // =============================
-// GPS管理
+// GPS管理（watchPosition不使用版）
 // =============================
 
 let currentLat = null
 let currentLng = null
-let gpsWatchId = null
+let gpsIntervalId = null
 
 
 function updateGPS(){
@@ -279,11 +279,29 @@ function updateGPS(){
 
   status.textContent="GPS取得開始"
 
-  if(gpsWatchId!==null){
-    navigator.geolocation.clearWatch(gpsWatchId)
+  // すでに動いていたら停止
+  if(gpsIntervalId!==null){
+    clearInterval(gpsIntervalId)
   }
 
-  gpsWatchId = navigator.geolocation.watchPosition(
+  // すぐ1回取得
+  getGPSPosition()
+
+  // 1分ごと更新
+  gpsIntervalId = setInterval(function(){
+
+    getGPSPosition()
+
+  },60000)
+
+}
+
+
+function getGPSPosition(){
+
+  const status = document.getElementById("gpsStatus")
+
+  navigator.geolocation.getCurrentPosition(
 
     function(position){
 
@@ -309,7 +327,6 @@ function updateGPS(){
     function(error){
 
       status.textContent="GPS取得失敗"
-
       console.log(error)
 
     },
@@ -324,21 +341,20 @@ function updateGPS(){
 
 }
 
+
 function stopGPS(){
 
-  if(gpsWatchId!==null){
+  if(gpsIntervalId!==null){
 
-    navigator.geolocation.clearWatch(gpsWatchId)
+    clearInterval(gpsIntervalId)
 
-    gpsWatchId=null
+    gpsIntervalId=null
 
     document.getElementById("gpsStatus").textContent="GPS停止"
 
   }
 
 }
-
-
 // -----------------------------
 // テキスト出力（従来形式とCSV形式）
 // -----------------------------
